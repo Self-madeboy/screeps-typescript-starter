@@ -15,3 +15,9 @@ export const Memory: {
 } = {
   creeps: {}
 };
+// 在 test/unit/mock.ts 中添加
+export const OK = 0;
+export const ERR_NOT_IN_RANGE = -9;
+export const RESOURCE_ENERGY = "energy";
+export const STRUCTURE_SPAWN = "spawn";
+export const STRUCTURE_EXTENSION = "extension";
