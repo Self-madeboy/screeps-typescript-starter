@@ -51,12 +51,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   // 生产 creeps
   if (harvesters.length < 2) {
-    const newName = 'Harvester' + Game.time;
+    const newName = 'Harvester' + harvesters.length + Game.time;
     spawn.spawnCreep([WORK, CARRY, MOVE], newName, {
       memory: { role: 'harvester', working: false, room: spawn.room.name }
     });
   } else if (upgraders.length < 2) {
-    const newName = 'Upgrader' + Game.time;
+    const newName = 'Upgrader' + upgraders.length + Game.time;
     spawn.spawnCreep([WORK, CARRY, MOVE], newName, {
       memory: { role: 'upgrader', working: false, room: spawn.room.name }
     });
@@ -74,13 +74,14 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
 });
-
 // Harvester 行为
 function runHarvester(creep: Creep) {
   if (creep.store.getFreeCapacity() > 0) {
     const sources = creep.room.find(FIND_SOURCES);
-    if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
-      creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+    // 根据 creep 名字的最后一个字符来决定使用哪个 source
+    const sourceIndex = creep.name.charAt(creep.name.length - 1) === '0' ? 0 : 1;
+    if (creep.harvest(sources[sourceIndex]) === ERR_NOT_IN_RANGE) {
+      creep.moveTo(sources[sourceIndex], { visualizePathStyle: { stroke: '#ffaa00' } });
     }
   } else {
     const targets = creep.room.find(FIND_STRUCTURES, {
@@ -113,8 +114,10 @@ function runUpgrader(creep: Creep) {
     }
   } else {
     const sources = creep.room.find(FIND_SOURCES);
-    if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
-      creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+    // 根据 creep 名字的最后一个字符来决定使用哪个 source
+    const sourceIndex = creep.name.charAt(creep.name.length - 1) === '0' ? 0 : 1;
+    if (creep.harvest(sources[sourceIndex]) === ERR_NOT_IN_RANGE) {
+      creep.moveTo(sources[sourceIndex], { visualizePathStyle: { stroke: '#ffaa00' } });
     }
   }
 }
